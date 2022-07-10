@@ -3,8 +3,13 @@ const app = express()
 const logger = require('./logger')
 const authorize = require('./authorize')
 //  req => middleware => res
-app.use([logger, authorize])
+app.use([logger, authorize]) // Only works for app functions used after this is declared, Order matters
 // api/home/about/products
+
+// 1 use vs route
+// 2. options of middleware our own/ express / third party
+
+//app.use(express.static('./public'))
 app.get('/', (req, res) => {
   res.send('Home')
 })

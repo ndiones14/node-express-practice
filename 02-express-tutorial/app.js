@@ -1,30 +1,20 @@
 const express = require('express')
 const app = express()
-const morgan = require('morgan')
-const logger = require('./logger')
-const authorize = require('./authorize')
-// req => middleware => res
 
-//app.use([logger,authorize]) // Only works for app functions used after this is declared
+const people = require('./routes/people')
+const auth = require('./routes/auth')
 
-//app.use('/api',[logger,authorize])
-app.use(morgan('tiny'))
-app.get('/', (req,res)=>{
-    res.send('Home')
-})
+// static asses
+app.use(express.static('./methods-public'))
+// parse form data
+app.use(express.urlencoded({ extended: false}))
+// parse Json
+app.use(express.json())
 
-app.get('/about',(req,res)=>{
-    res.send('About')
-})
+app.use('/api/people', people)
+app.use('/login', auth)
 
-app.get('/api/products',(req,res)=>{
-    res.send('Products')
-})
 
-app.get('/api/items',(req,res)=>{
-    console.log(req.user)
-    res.send('Items')
-})
 
 app.listen(5000, () =>{
     console.log('Server is listening on port 5000...')
